@@ -2,6 +2,8 @@ package com.firstblh.qqsidemenu.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.v4.widget.ViewDragHelper;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -150,10 +152,21 @@ public class SlidingMenu extends HorizontalScrollView {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
-        float scale = 1 - 0.7f * l / menuWidth;
-        mMenu.setTranslationX(menuWidth - menuWidth * scale);
-        mContent.setScaleX(mContent.getWidth() * (l / menuWidth ));
-        mContent.setScaleY(mContent.getHeight() * (l / menuWidth));
+        float scale = 1.0f * l / menuWidth;
+
+        mMenu.setTranslationX(menuWidth * scale * 0.7f);
+        float contentScale = 0.7f + 0.3f * scale;
+        float menuScale = 0.6f + 0.4f * (1 - scale);
+        float menuAlpha = 0.6f + 0.4f*(1-scale);
+        mContent.setPivotX(0);
+        mContent.setPivotY(mContent.getHeight() / 2);
+        mContent.setScaleX(contentScale);
+        mContent.setScaleY(contentScale);
+        mMenu.setScaleX(menuScale);
+        mMenu.setScaleY(menuScale);
+        mMenu.setAlpha(menuAlpha);
+//        mContent.setScaleX(mContent.getWidth() * (l / menuWidth ));
+//        mContent.setScaleY(mContent.getHeight() * (l / menuWidth));
 
     }
 }
