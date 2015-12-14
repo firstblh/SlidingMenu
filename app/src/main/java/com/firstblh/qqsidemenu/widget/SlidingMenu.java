@@ -27,7 +27,7 @@ public class SlidingMenu extends HorizontalScrollView {
     private boolean isInit = true;
     private int screenWidth;
     private int mRightPadding;
-    private boolean isOpen;
+    private boolean isOpen = false;
 
 
     public SlidingMenu(Context context, AttributeSet attrs) {
@@ -106,15 +106,17 @@ public class SlidingMenu extends HorizontalScrollView {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_UP:
                 //scrollX 是隐藏在左边的宽度
+                isOpen = false;
                 int scrollX = getScrollX();
                 Log.e("SlidingMenu onLayout", "scrollX --> " + scrollX);
                 if (scrollX >= menuWidth / 2) {
                     this.smoothScrollTo(menuWidth, 0);
-                    isOpen = true;
+                    //isOpen = true;
                 } else {
                     this.smoothScrollTo(0, 0);
-                    isOpen = false;
+                    // isOpen = false;
                 }
+
                 return true;
         }
         return super.onTouchEvent(ev);
@@ -126,7 +128,7 @@ public class SlidingMenu extends HorizontalScrollView {
     public void openMenu() {
         if (isOpen) return;
         this.smoothScrollTo(0, 0);
-        isOpen = true;
+        this.isOpen = true;
     }
 
     /**
@@ -135,7 +137,7 @@ public class SlidingMenu extends HorizontalScrollView {
     public void closeMenu() {
         if (!isOpen) return;
         this.smoothScrollTo(menuWidth, 0);
-        isOpen = false;
+        this.isOpen = false;
     }
 
     /**
@@ -157,7 +159,7 @@ public class SlidingMenu extends HorizontalScrollView {
         mMenu.setTranslationX(menuWidth * scale * 0.7f);
         float contentScale = 0.7f + 0.3f * scale;
         float menuScale = 0.6f + 0.4f * (1 - scale);
-        float menuAlpha = 0.6f + 0.4f*(1-scale);
+        float menuAlpha = 0.6f + 0.4f * (1 - scale);
         mContent.setPivotX(0);
         mContent.setPivotY(mContent.getHeight() / 2);
         mContent.setScaleX(contentScale);
@@ -167,6 +169,22 @@ public class SlidingMenu extends HorizontalScrollView {
         mMenu.setAlpha(menuAlpha);
 //        mContent.setScaleX(mContent.getWidth() * (l / menuWidth ));
 //        mContent.setScaleY(mContent.getHeight() * (l / menuWidth));
+//        Log.e(this.getClass().getName(), "scrollX:" + l + "==" + "menuWidth:" + menuWidth);
+//        Log.e(this.getClass().getName(), "isOpen:" + isOpen + "");
+        if (Math.abs(l) == 0)
+
+        {
+
+            isOpen = true;
+        } else {
+            isOpen = false;
+        }
+
+    }
+
+    @Override
+    protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
 
     }
 }
